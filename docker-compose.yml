@@ -1,0 +1,59 @@
+services:
+  
+  db:
+    image: mongo:7
+    container_name: mongo_medium
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo_db:/data/db
+    restart: unless-stopped
+    healthcheck:
+     test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')", "--quiet"]
+     interval: 11s
+     timeout: 7s
+     retries: 4
+     start_period: 12s
+
+  backend:
+    build: ./server
+    container_name: medium-backend
+    env_file:
+     - ./server/.env
+    ports:
+      - 8080:8000
+
+    depends_on:
+      db:
+
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./client
+    container_name: medium-frontend
+    env_file:
+     - ./client/.env
+    ports:
+     - 5174:5173
+    depends_on:
+      - backend
+
+
+volumes:
+  mongo_db:
+
+
+
+    
+    
+
+
+
+
+
+      
+    
+
+
+    
