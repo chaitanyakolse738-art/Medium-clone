@@ -22,6 +22,7 @@ services:
      - ./server/.env
     ports:
       - 8080:8000
+    restart: unless-stopped
 
     depends_on:
       db:
@@ -34,6 +35,7 @@ services:
     container_name: medium-frontend
     env_file:
      - ./client/.env
+    restart: unless-stopped
     ports:
      - 5174:5173
     depends_on:
