@@ -1,0 +1,34 @@
+name: CD
+
+on:
+  workflow_run:
+    workflows: ["CI"]  
+    types:
+      - completed    
+
+jobs:
+  
+  deploy:
+    
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: clone code 
+        uses: actions/checkout@v4
+
+      - name: copy env file 
+        run: |
+         cp client/.env.example client/.env 
+         cp server/.env.example server/.env
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: deploy docker container with compose
+        run: |
+          docker compose pull
+          docker compose up -d
+ 
