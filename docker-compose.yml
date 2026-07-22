@@ -17,6 +17,7 @@ services:
 
   backend:
     build: ./server
+    image: chaitanya057/medium-backend
     container_name: medium-backend
     env_file:
      - ./server/.env
@@ -30,8 +31,8 @@ services:
         condition: service_healthy
 
   frontend:
-    build:
-      context: ./client
+    build: ./frontend
+    image: chaitanya057/medium-frontend
     container_name: medium-frontend
     env_file:
      - ./client/.env
@@ -40,6 +41,8 @@ services:
      - 5174:5173
     depends_on:
       - backend
+
+    
 
 
 volumes:
